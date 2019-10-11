@@ -1,6 +1,8 @@
 import React, { useReducer, useState } from "react";
 
-type Actions = { type: "add"; text: string, id: number } | { type: "remove"; idx: number };
+type Actions =
+  | { type: "add"; text: string; id: number }
+  | { type: "remove"; idx: number };
 
 interface Todo {
   id: number;
@@ -13,9 +15,9 @@ type State = Todo[];
 const TodoReducer = (state: State, action: Actions) => {
   switch (action.type) {
     case "add":
-      return [...state, { text: action.text, complete: false, id: action.id}];
+      return [...state, { text: action.text, complete: false, id: action.id }];
     case "remove":
-      return state.filter((_, i) => action.idx !== i);
+      return state.filter(todo => action.idx !== todo.id);
     default:
       return state;
   }
@@ -29,14 +31,16 @@ export const ReducerExample: React.FC = () => {
   return (
     <div>
       <input
+        value = {text}
         onChange={e => {
           setText(e.target.value);
         }}
       />
       <button
         onClick={() => {
-          dispatch({ type: "add", text: text, id: todoId});
+          dispatch({ type: "add", text: text, id: todoId });
           setTodoId(todoId + 1);
+          setText("");
         }}
       >
         +
